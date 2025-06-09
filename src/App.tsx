@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import supabase from "./utils/supabase";
+import Table from "./components/common/Table/Table";
 
 function App() {
-  const [seasons, setSeasons] = useState<{ id: number; name: string }[]>([]);
+  const [seasons, setSeasons] = useState<
+    { id: number; created_at: Date; name: string }[]
+  >([]);
 
   useEffect(() => {
     async function getSeasons() {
       const { data: seasons } = await supabase.from("Seasons").select();
 
-      if (seasons && seasons.length >= 1) {
+      if (seasons && seasons.length > 0) {
         setSeasons(seasons);
       }
     }
@@ -19,9 +22,7 @@ function App() {
 
   return (
     <div>
-      {seasons.map((season) => (
-        <li key={season.id}>{season.name}</li>
-      ))}
+      <Table tableName="Seasons" tableData={seasons} />
     </div>
   );
 }
